@@ -13,23 +13,24 @@ from ultralytics import YOLO
 # ========================
 # 상수 정의
 # ========================
-MODEL_PATH = '/home/lhj/rokey_ws/model/my_best.pt'  # YOLO 모델 경로
-IMAGE_TOPIC = '/robot1/oakd/rgb/preview/image_raw'     # 이미지 토픽
-TARGET_CLASS_ID = 0                                     # 인식할 클래스 ID
+MODEL_PATH = "/home/we/rokey_ws/model/my_best.pt"  # YOLO 모델 경로
+IMAGE_TOPIC = "/robot1/oakd/rgb/preview/image_raw"  # 이미지 토픽
+TARGET_CLASS_ID = 0  # 인식할 클래스 ID
+
 
 # ========================
 # YOLO 객체 인식 노드 정의
 # ========================
 class YOLOViewerNode(Node):
     def __init__(self):
-        super().__init__('yolo_viewer_node')
+        super().__init__("yolo_viewer_node")
 
         # 모델 로딩
         if not os.path.exists(MODEL_PATH):
             self.get_logger().error(f"Model not found: {MODEL_PATH}")
             sys.exit(1)
         self.model = YOLO(MODEL_PATH)
-        self.class_names = getattr(self.model, 'names', [])
+        self.class_names = getattr(self.model, "names", [])
 
         self.bridge = CvBridge()
 
@@ -40,10 +41,7 @@ class YOLOViewerNode(Node):
 
         # 이미지 구독
         self.subscription = self.create_subscription(
-            Image,
-            IMAGE_TOPIC,
-            self.image_callback,
-            10
+            Image, IMAGE_TOPIC, self.image_callback, 10
         )
 
         # 백그라운드 처리 스레드 시작
@@ -53,7 +51,7 @@ class YOLOViewerNode(Node):
 
     def image_callback(self, msg):
         # ROS 메시지를 OpenCV 이미지로 변환
-        frame = self.bridge.imgmsg_to_cv2(msg, desired_encoding='bgr8')
+        frame = self.bridge.imgmsg_to_cv2(msg, desired_encoding="bgr8")
 
         # 큐에 프레임 추가 (이전 프레임 덮어쓰기)
         if not self.image_queue.full():
@@ -84,26 +82,45 @@ class YOLOViewerNode(Node):
 
                     x1, y1, x2, y2 = map(int, box.xyxy[0])
                     conf = math.ceil(box.conf[0] * 100) / 100
-                    label = self.class_names[cls] if cls < len(self.class_names) else f"class_{cls}"
+                    label = (
+                        self.class_names[cls]
+                        if cls < len(self.class_names)
+                        else f"class_{cls}"
+                    )
 
                     cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 0, 255), 2)
-                    cv2.putText(frame, f"{label}: {conf}", (x1, y1 - 10),
-                                cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 0, 0), 2)
+                    cv2.putText(
+                        frame,
+                        f"{label}: {conf}",
+                        (x1, y1 - 10),
+                        cv2.FONT_HERSHEY_SIMPLEX,
+                        0.8,
+                        (255, 0, 0),
+                        2,
+                    )
                     object_count += 1
 
-            cv2.putText(frame, f"Objects: {object_count}", (10, 30),
-                        cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 2)
+            cv2.putText(
+                frame,
+                f"Objects: {object_count}",
+                (10, 30),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                0.8,
+                (0, 255, 0),
+                2,
+            )
 
             # 시각화
-            display_img = cv2.resize(frame, (frame.shape[1]*2, frame.shape[0]*2))
+            display_img = cv2.resize(frame, (frame.shape[1] * 2, frame.shape[0] * 2))
             cv2.imshow(self.window_name, display_img)
 
             # 종료 감지
             key = cv2.waitKey(1)
-            if key == ord('q'):
+            if key == ord("q"):
                 self.should_shutdown = True
                 self.get_logger().info("Q pressed. Shutting down...")
                 break
+
 
 # ========================
 # 메인 함수
@@ -126,5 +143,6 @@ def main():
         print("Shutdown complete.")
         sys.exit(0)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()
