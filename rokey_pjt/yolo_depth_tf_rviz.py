@@ -17,13 +17,13 @@ from ultralytics import YOLO
 import torch
 
 # === 상수 정의 ===
-MODEL_PATH = '/home/lhj/rokey_ws/model/best.pt'
+MODEL_PATH = '/home/rokey/rokey_ws/model/best.pt'
 TARGET_CLASS_ID = 0
 INFERENCE_PERIOD_SEC = 1.0 / 20  # 20Hz 추론 주기
-RGB_TOPIC = 'cropped/rgb/image_raw'
-DEPTH_TOPIC = 'cropped/depth/image_raw'
-CAMERA_INFO_TOPIC = 'cropped/camera_info'
-MARKER_TOPIC = 'detected_objects_marker'
+RGB_TOPIC = '/robot1/oakd/rgb/preview/image_raw'
+DEPTH_TOPIC = '/robot1/oakd/stereo/image_raw'
+CAMERA_INFO_TOPIC = '/robot1/oakd/stereo/camera_info'
+MARKER_TOPIC = '/robot1/detected_objects_marker'
 
 class YoloDepthToMap(Node):
     def __init__(self):
@@ -115,6 +115,7 @@ class YoloDepthToMap(Node):
         marker.color.a = 1.0
         marker.lifetime.sec = 3
         self.marker_pub.publish(marker)
+        self.get_logger().info(f'[map_base] map_x:{x}, map_y:{y}, map_z{z}')
 
     def inference_callback(self):
         with self.lock:
@@ -131,8 +132,8 @@ class YoloDepthToMap(Node):
                 continue
             for box in result.boxes:
                 cls = int(box.cls[0])
-                if cls != TARGET_CLASS_ID:
-                    continue
+                # if cls != TARGET_CLASS_ID:
+                #     continue
 
                 u, v = map(int, box.xywh[0][:2].cpu().numpy())
                 if not (0 <= v < depth.shape[0] and 0 <= u < depth.shape[1]):
@@ -200,7 +201,8 @@ def main():
                     cv2.putText(frame, f"{label} {conf:.2f} {z:.2f}m", (x1, y1 - 5),
                                 cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 2)
 
-                cv2.imshow("YOLO + Depth + Map", frame)
+                display_img = cv2.resize(frame, (frame.shape[1]*3, frame.shape[0]*3))
+                cv2.imshow("YOLO + Depth + Map", display_img)
 
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 node.get_logger().info("Shutdown requested by user.")
