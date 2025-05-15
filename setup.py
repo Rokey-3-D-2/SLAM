@@ -30,6 +30,8 @@ setup(
             "tf_trans = rokey_pjt.tf_point_transform:main",
             "object_xyz_marker = rokey_pjt.yolo_depth_tf_rviz:main",
             "image_viewer = rokey_pjt.image_viewer:main",
+            "subscribe_err = rokey_pjt.subscribe_err:main",
+            "publish_err = rokey_pjt.publish_err:main",
         ],
     },
 )

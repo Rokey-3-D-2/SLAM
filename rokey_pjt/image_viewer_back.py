@@ -1,7 +1,6 @@
 import rclpy
 from rclpy.node import Node
-from geometry_msgs.msg import Point
-from std_msgs.msg import Float32MultiArray
+from rokey_pjt_interfaces.msg import AnomalyReport
 import cv2
 from PIL import Image, ImageTk
 import tkinter as tk
@@ -12,7 +11,7 @@ class MapMarkerNode(Node):
     def __init__(self):
         super().__init__("map_marker_node")
 
-        # 맵 이미지 로딩 및 확대
+        # 맵 로드 및 확대
         map_path = "/home/we/rokey_ws/maps/first_map.pgm"
         raw_map = cv2.imread(map_path, cv2.IMREAD_GRAYSCALE)
         if raw_map is None:
@@ -28,30 +27,39 @@ class MapMarkerNode(Node):
             interpolation=cv2.INTER_NEAREST,
         )
 
-        # ROS2 구독자
-        self.create_subscription(Point, "/robot_pose", self.robot_callback, 10)
+        # 위치 저장
+        self.robot_pos = None
+        self.anomaly_positions = []
+
+        # 구독자: AnomalyReport 하나만
         self.create_subscription(
-            Float32MultiArray, "/obstacles", self.obstacle_callback, 10
+            AnomalyReport,
+            "/robot1/error_detected",
+            self.anomaly_callback,
+            10,
         )
 
-        self.robot_pos = None
-        self.obstacles = []
-
-        # GUI 시작
+        # GUI 쓰레드 실행
         threading.Thread(target=self.init_gui, daemon=True).start()
 
-    def robot_callback(self, msg):
-        self.robot_pos = (msg.x * self.scale_factor, msg.y * self.scale_factor)
+    def anomaly_callback(self, msg):
+        # 이상 위치 마커 추가
+        ox = msg.object_x * self.scale_factor
+        oy = msg.object_y * self.scale_factor
+        self.anomaly_positions.append((ox, oy))
 
-    def obstacle_callback(self, msg):
-        self.obstacles = [
-            (msg.data[i] * self.scale_factor, msg.data[i + 1] * self.scale_factor)
-            for i in range(0, len(msg.data), 2)
-        ]
+        # 로봇 위치 갱신
+        rx = msg.robot_x * self.scale_factor
+        ry = msg.robot_y * self.scale_factor
+        self.robot_pos = (rx, ry)
+
+        self.get_logger().info(
+            f"이상 감지: {msg.anomaly_label} | 객체=({ox:.1f},{oy:.1f}) 로봇=({rx:.1f},{ry:.1f})"
+        )
 
     def init_gui(self):
         self.root = tk.Tk()
-        self.root.title("확대된 맵 - 로봇 및 장애물 위치 표시")
+        self.root.title("확대 맵 - 로봇 및 이상 위치 표시")
 
         height, width = self.map_image.shape
         self.canvas = tk.Canvas(self.root, width=width, height=height)
@@ -67,14 +75,14 @@ class MapMarkerNode(Node):
     def update_loop(self):
         self.canvas.delete("marker")
 
-        # 로봇 위치 마킹 (빨간색)
+        # 로봇 위치 (빨간색)
         if self.robot_pos:
             x, y = self.robot_pos
-            self.draw_circle(x, y, 6, "red")
+            self.draw_circle(x, y, 10, "red")
 
-        # 장애물 마킹 (파란색)
-        for obs_x, obs_y in self.obstacles:
-            self.draw_circle(obs_x, obs_y, 4, "blue")
+        # 이상 위치들 (보라색)
+        for x, y in self.anomaly_positions:
+            self.draw_circle(x, y, 8, "purple")
 
         self.root.after(100, self.update_loop)
 
