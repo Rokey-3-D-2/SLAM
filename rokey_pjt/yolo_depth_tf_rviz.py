@@ -24,6 +24,11 @@ RGB_TOPIC = '/robot1/oakd/rgb/preview/image_raw'
 DEPTH_TOPIC = '/robot1/oakd/stereo/image_raw'
 CAMERA_INFO_TOPIC = '/robot1/oakd/stereo/camera_info'
 MARKER_TOPIC = '/robot1/detected_objects_marker'
+ERROR_TOPIC = '/robot1/error_detected'
+
+BASE_LINK = 'base_link'
+XYZ = ['x', 'y', 'z']
+make_xyz_dict = lambda x: {k:v for k, v in zip(XYZ, x)}
 
 class YoloDepthToMap(Node):
     def __init__(self):
@@ -58,7 +63,8 @@ class YoloDepthToMap(Node):
 
         self.marker_pub = self.create_publisher(Marker, MARKER_TOPIC, 10)
         self.marker_id = 0
-        self.get_logger().info(f"[5/5] RViz Marker 퍼블리셔 설정 완료: {MARKER_TOPIC}")
+        self.error_pub = self.create_publisher(, ERROR_TOPIC, 10)
+        self.get_logger().info(f"[5/5] 퍼블리셔 설정 완료: {MARKER_TOPIC}")
 
         self.create_timer(INFERENCE_PERIOD_SEC, self.inference_callback)
 
@@ -101,6 +107,7 @@ class YoloDepthToMap(Node):
         marker.header.stamp = self.get_clock().now().to_msg()
         marker.ns = 'detected_objects'
         marker.id = self.marker_id
+        marker.text = label
         self.marker_id += 1
         marker.type = Marker.SPHERE
         marker.action = Marker.ADD
@@ -115,7 +122,15 @@ class YoloDepthToMap(Node):
         marker.color.a = 1.0
         marker.lifetime.sec = 3
         self.marker_pub.publish(marker)
-        self.get_logger().info(f'[map_base] map_x:{x}, map_y:{y}, map_z{z}')
+    
+    def publish_error(self, base:dict, obj:dict, label:str, img):
+        log = f"Error Detected : {label}"
+        img = self.bridge.cv2_to_imgmsg(img, 'bgr8')
+
+        # write msg
+        msg = 
+
+        self.error_pub.publish()
 
     def inference_callback(self):
         with self.lock:
@@ -152,14 +167,29 @@ class YoloDepthToMap(Node):
                 conf = float(box.conf[0])
                 label = self.classNames[cls] if cls < len(self.classNames) else f'class_{cls}'
 
+                # object 기준 포인트 생성
                 pt_camera = PointStamped()
                 pt_camera.header.frame_id = rgb_msg.header.frame_id
                 pt_camera.header.stamp = rclpy.time.Time().to_msg()
                 pt_camera.point.x, pt_camera.point.y, pt_camera.point.z = x, y, z
 
-                map_x, map_y, map_z = self.transform_to_map(pt_camera, label)
-                if not np.isnan(map_x):
-                    self.publish_marker(map_x, map_y, map_z, label)
+                obj_x, pbj_y, obj_z = self.transform_to_map(pt_camera, label)
+                if not np.isnan(obj_x):
+                    self.publish_marker(obj_x, pbj_y, obj_z, label)
+
+                if 'err' in label:
+                    # base_link 기준 포인트 생성
+                    base = PointStamped()
+                    base.header.frame_id = BASE_LINK
+                    base.header.stamp = rclpy.time.Time().to_msg()
+                    base.point.x, base.point.y, base.point.z = 0.0, 0.0, 0.0
+
+                    base_x, base_y, base_z = self.transform_to_map(base, base.header.frame_id)
+                    
+                    obj = make_xyz_dict([obj_x, pbj_y, obj_z])
+                    base = make_xyz_dict([base_x, base_y, base_z])
+                    img = self.display_rgb
+                    self.publish_error(base, obj, label, img)
 
                 overlay_info.append({
                     "label": label,
