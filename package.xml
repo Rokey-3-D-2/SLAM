@@ -7,6 +7,10 @@
   <maintainer email="hojun7889@gmail.com">lhj</maintainer>
   <license>Apache-2.0</license>
 
+  <exec_depend>rclpy</exec_depend>
+  <exec_depend>irobot_create_msgs</exec_depend>
+  <exec_depend>builtin_interfaces</exec_depend>
+
   <depend>rokey_pjt_interfaces</depend>
 
   <test_depend>ament_copyright</test_depend>
