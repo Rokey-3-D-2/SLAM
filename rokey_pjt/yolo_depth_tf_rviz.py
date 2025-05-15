@@ -1,6 +1,9 @@
 import rclpy
 from rclpy.node import Node
+from rclpy.time import Time as RclTime
 from rclpy.executors import MultiThreadedExecutor
+from rokey_pjt.msg import AnomalyReport
+from builtin_interfaces.msg import Time
 from sensor_msgs.msg import Image, CameraInfo
 from geometry_msgs.msg import PointStamped
 from visualization_msgs.msg import Marker
@@ -125,12 +128,25 @@ class YoloDepthToMap(Node):
     
     def publish_error(self, base:dict, obj:dict, label:str, img):
         log = f"Error Detected : {label}"
-        img = self.bridge.cv2_to_imgmsg(img, 'bgr8')
+        img_msg = self.bridge.cv2_to_imgmsg(img, 'bgr8')
 
-        # write msg
-        msg = 
+        # 메시지 구성
+        msg = AnomalyReport()
+        msg.anomaly_label = label
+        msg.description = log
 
-        self.error_pub.publish()
+        msg.robot_x = base.get("x", 0.0)
+        msg.robot_y = base.get("y", 0.0)
+        msg.robot_z = base.get("z", 0.0)
+
+        msg.object_x = obj.get("x", 0.0)
+        msg.object_y = obj.get("y", 0.0)
+        msg.object_z = obj.get("z", 0.0)
+
+        msg.timestamp = RclTime().to_msg()
+        msg.image = img_msg
+
+        self.error_pub.publish(msg)
 
     def inference_callback(self):
         with self.lock:
