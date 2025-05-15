@@ -66,7 +66,7 @@ class YoloDepthToMap(Node):
 
         self.marker_pub = self.create_publisher(Marker, MARKER_TOPIC, 10)
         self.marker_id = 0
-        self.error_pub = self.create_publisher(, ERROR_TOPIC, 10)
+        self.error_pub = self.create_publisher(AnomalyReport, ERROR_TOPIC, 10)
         self.get_logger().info(f"[5/5] 퍼블리셔 설정 완료: {MARKER_TOPIC}")
 
         self.create_timer(INFERENCE_PERIOD_SEC, self.inference_callback)
