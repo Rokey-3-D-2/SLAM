@@ -1,0 +1,59 @@
+running egg_info
+creating build/rokey_pjt/rokey_pjt.egg-info
+writing build/rokey_pjt/rokey_pjt.egg-info/PKG-INFO
+writing dependency_links to build/rokey_pjt/rokey_pjt.egg-info/dependency_links.txt
+writing entry points to build/rokey_pjt/rokey_pjt.egg-info/entry_points.txt
+writing requirements to build/rokey_pjt/rokey_pjt.egg-info/requires.txt
+writing top-level names to build/rokey_pjt/rokey_pjt.egg-info/top_level.txt
+writing manifest file 'build/rokey_pjt/rokey_pjt.egg-info/SOURCES.txt'
+reading manifest file 'build/rokey_pjt/rokey_pjt.egg-info/SOURCES.txt'
+adding license file 'LICENSE'
+writing manifest file 'build/rokey_pjt/rokey_pjt.egg-info/SOURCES.txt'
+running build
+running build_py
+creating /home/choin/rokey_ws/src/rokey_pjt/build/rokey_pjt/build
+creating /home/choin/rokey_ws/src/rokey_pjt/build/rokey_pjt/build/lib
+creating /home/choin/rokey_ws/src/rokey_pjt/build/rokey_pjt/build/lib/rokey_pjt
+copying rokey_pjt/3_tb4_yolo_bbox_depth_checker.py -> /home/choin/rokey_ws/src/rokey_pjt/build/rokey_pjt/build/lib/rokey_pjt
+copying rokey_pjt/__init__.py -> /home/choin/rokey_ws/src/rokey_pjt/build/rokey_pjt/build/lib/rokey_pjt
+copying rokey_pjt/tf_point_transform.py -> /home/choin/rokey_ws/src/rokey_pjt/build/rokey_pjt/build/lib/rokey_pjt
+copying rokey_pjt/yolo_depth_tf.py -> /home/choin/rokey_ws/src/rokey_pjt/build/rokey_pjt/build/lib/rokey_pjt
+copying rokey_pjt/depth_checker.py -> /home/choin/rokey_ws/src/rokey_pjt/build/rokey_pjt/build/lib/rokey_pjt
+copying rokey_pjt/yolo_depth_tf_rviz.py -> /home/choin/rokey_ws/src/rokey_pjt/build/rokey_pjt/build/lib/rokey_pjt
+copying rokey_pjt/3_tb4_yolov8_obj_det.py -> /home/choin/rokey_ws/src/rokey_pjt/build/rokey_pjt/build/lib/rokey_pjt
+copying rokey_pjt/depth_checker_mouse_click.py -> /home/choin/rokey_ws/src/rokey_pjt/build/rokey_pjt/build/lib/rokey_pjt
+copying rokey_pjt/4_tb4_yolov8_obj_det_thread.py -> /home/choin/rokey_ws/src/rokey_pjt/build/rokey_pjt/build/lib/rokey_pjt
+copying rokey_pjt/5_tb4_yolov8_obj_det_track.py -> /home/choin/rokey_ws/src/rokey_pjt/build/rokey_pjt/build/lib/rokey_pjt
+running install
+running install_lib
+creating /home/choin/rokey_ws/src/rokey_pjt/install/rokey_pjt/lib/python3.10/site-packages/rokey_pjt
+copying /home/choin/rokey_ws/src/rokey_pjt/build/rokey_pjt/build/lib/rokey_pjt/3_tb4_yolo_bbox_depth_checker.py -> /home/choin/rokey_ws/src/rokey_pjt/install/rokey_pjt/lib/python3.10/site-packages/rokey_pjt
+copying /home/choin/rokey_ws/src/rokey_pjt/build/rokey_pjt/build/lib/rokey_pjt/__init__.py -> /home/choin/rokey_ws/src/rokey_pjt/install/rokey_pjt/lib/python3.10/site-packages/rokey_pjt
+copying /home/choin/rokey_ws/src/rokey_pjt/build/rokey_pjt/build/lib/rokey_pjt/tf_point_transform.py -> /home/choin/rokey_ws/src/rokey_pjt/install/rokey_pjt/lib/python3.10/site-packages/rokey_pjt
+copying /home/choin/rokey_ws/src/rokey_pjt/build/rokey_pjt/build/lib/rokey_pjt/yolo_depth_tf.py -> /home/choin/rokey_ws/src/rokey_pjt/install/rokey_pjt/lib/python3.10/site-packages/rokey_pjt
+copying /home/choin/rokey_ws/src/rokey_pjt/build/rokey_pjt/build/lib/rokey_pjt/depth_checker.py -> /home/choin/rokey_ws/src/rokey_pjt/install/rokey_pjt/lib/python3.10/site-packages/rokey_pjt
+copying /home/choin/rokey_ws/src/rokey_pjt/build/rokey_pjt/build/lib/rokey_pjt/yolo_depth_tf_rviz.py -> /home/choin/rokey_ws/src/rokey_pjt/install/rokey_pjt/lib/python3.10/site-packages/rokey_pjt
+copying /home/choin/rokey_ws/src/rokey_pjt/build/rokey_pjt/build/lib/rokey_pjt/3_tb4_yolov8_obj_det.py -> /home/choin/rokey_ws/src/rokey_pjt/install/rokey_pjt/lib/python3.10/site-packages/rokey_pjt
+copying /home/choin/rokey_ws/src/rokey_pjt/build/rokey_pjt/build/lib/rokey_pjt/depth_checker_mouse_click.py -> /home/choin/rokey_ws/src/rokey_pjt/install/rokey_pjt/lib/python3.10/site-packages/rokey_pjt
+copying /home/choin/rokey_ws/src/rokey_pjt/build/rokey_pjt/build/lib/rokey_pjt/4_tb4_yolov8_obj_det_thread.py -> /home/choin/rokey_ws/src/rokey_pjt/install/rokey_pjt/lib/python3.10/site-packages/rokey_pjt
+copying /home/choin/rokey_ws/src/rokey_pjt/build/rokey_pjt/build/lib/rokey_pjt/5_tb4_yolov8_obj_det_track.py -> /home/choin/rokey_ws/src/rokey_pjt/install/rokey_pjt/lib/python3.10/site-packages/rokey_pjt
+byte-compiling /home/choin/rokey_ws/src/rokey_pjt/install/rokey_pjt/lib/python3.10/site-packages/rokey_pjt/3_tb4_yolo_bbox_depth_checker.py to 3_tb4_yolo_bbox_depth_checker.cpython-310.pyc
+byte-compiling /home/choin/rokey_ws/src/rokey_pjt/install/rokey_pjt/lib/python3.10/site-packages/rokey_pjt/__init__.py to __init__.cpython-310.pyc
+byte-compiling /home/choin/rokey_ws/src/rokey_pjt/install/rokey_pjt/lib/python3.10/site-packages/rokey_pjt/tf_point_transform.py to tf_point_transform.cpython-310.pyc
+byte-compiling /home/choin/rokey_ws/src/rokey_pjt/install/rokey_pjt/lib/python3.10/site-packages/rokey_pjt/yolo_depth_tf.py to yolo_depth_tf.cpython-310.pyc
+byte-compiling /home/choin/rokey_ws/src/rokey_pjt/install/rokey_pjt/lib/python3.10/site-packages/rokey_pjt/depth_checker.py to depth_checker.cpython-310.pyc
+byte-compiling /home/choin/rokey_ws/src/rokey_pjt/install/rokey_pjt/lib/python3.10/site-packages/rokey_pjt/yolo_depth_tf_rviz.py to yolo_depth_tf_rviz.cpython-310.pyc
+byte-compiling /home/choin/rokey_ws/src/rokey_pjt/install/rokey_pjt/lib/python3.10/site-packages/rokey_pjt/3_tb4_yolov8_obj_det.py to 3_tb4_yolov8_obj_det.cpython-310.pyc
+byte-compiling /home/choin/rokey_ws/src/rokey_pjt/install/rokey_pjt/lib/python3.10/site-packages/rokey_pjt/depth_checker_mouse_click.py to depth_checker_mouse_click.cpython-310.pyc
+byte-compiling /home/choin/rokey_ws/src/rokey_pjt/install/rokey_pjt/lib/python3.10/site-packages/rokey_pjt/4_tb4_yolov8_obj_det_thread.py to 4_tb4_yolov8_obj_det_thread.cpython-310.pyc
+byte-compiling /home/choin/rokey_ws/src/rokey_pjt/install/rokey_pjt/lib/python3.10/site-packages/rokey_pjt/5_tb4_yolov8_obj_det_track.py to 5_tb4_yolov8_obj_det_track.cpython-310.pyc
+running install_data
+creating /home/choin/rokey_ws/src/rokey_pjt/install/rokey_pjt/share/ament_index
+creating /home/choin/rokey_ws/src/rokey_pjt/install/rokey_pjt/share/ament_index/resource_index
+creating /home/choin/rokey_ws/src/rokey_pjt/install/rokey_pjt/share/ament_index/resource_index/packages
+copying resource/rokey_pjt -> /home/choin/rokey_ws/src/rokey_pjt/install/rokey_pjt/share/ament_index/resource_index/packages
+copying package.xml -> /home/choin/rokey_ws/src/rokey_pjt/install/rokey_pjt/share/rokey_pjt
+running install_egg_info
+Copying build/rokey_pjt/rokey_pjt.egg-info to /home/choin/rokey_ws/src/rokey_pjt/install/rokey_pjt/lib/python3.10/site-packages/rokey_pjt-0.0.0-py3.10.egg-info
+running install_scripts
+writing list of installed files to '/home/choin/rokey_ws/src/rokey_pjt/build/rokey_pjt/install.log'
