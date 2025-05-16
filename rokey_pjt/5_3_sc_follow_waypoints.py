@@ -9,13 +9,13 @@ from tf_transformations import quaternion_from_euler
 import time
 
 GOAL_POSES_BOT = [
-    [0.0350, 0.6523, 0.0],  # map_bot1
-    [-0.0619, -1.6371, 0.0],  # map_bot2
-    [0.4564, -0.8648, 0.0],  # map_bot3
+    [0.0350, 0.6523, 180.0],  # map_bot1
+    [-0.0619, -1.6371, 180.0],  # map_bot2
+    [0.4564, -0.8648, 270.0],  # map_bot3
     [0.8353, -1.6557, 0.0],  # map_bot4
     [1.0313, 0.6398, 0.0],   # map_bot5
     # return to docking station
-    [0.4564, -0.8648, 0.0],  # map_bot3
+    [0.4564, -0.8648, 180.0],  # map_bot3
     [0.0350, 0.6523, 0.0],  # map_bot1 
 ]
 

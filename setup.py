@@ -34,6 +34,7 @@ setup(
             'sc_nav_to_pose = rokey_pjt.5_1_sc_nav_to_pose:main',
             'sc_nav_through_poses = rokey_pjt.5_2_sc_nav_through_poses:main',
             'sc_follow_waypoints = rokey_pjt.5_3_sc_follow_waypoints:main',
+            'tf_service_server = rokey_pjt.final_tf_transform_service:main'
         ],
     },
 )

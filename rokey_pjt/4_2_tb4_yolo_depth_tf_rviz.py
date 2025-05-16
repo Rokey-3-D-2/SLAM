@@ -111,28 +111,35 @@ class YoloDepthToMap(Node):
         return point
     
     def transform_to_map(self, point: PointStamped, class_name: str):
-        req = TransformPoint.Request()
-        req.input = point
-        req.label = class_name
+        # req = TransformPoint.Request()
+        # req.input = point
+        # req.label = class_name
 
-        future = self.tf_service.call_async(req)
-        res = future.result()
+        # # future = self.tf_service.call(req)
+        # future = self.tf_service.call_async(req)
+        # # res = future.result()
+        # # rclpy.spin_until_future_complete(self, future)
+        # if future.result():
+        #     res = future.result()
 
-        if res.success:
-            self.get_logger().info(res.error_msg)
-        else:
-            self.get_logger().warn(res.error_msg)
+        #     if res.success:
+        #         self.get_logger().info(res.error_msg)
+        #     else:
+        #         self.get_logger().warn(res.error_msg)
 
-        return res.x, res.y, res.z
+        #     return res.x, res.y, res.z
 
-        # try:
-        #     map = self.tf_buffer.transform(point, 'map', timeout=rclpy.duration.Duration(seconds=1.0))
-        #     x, y, z = map.point.x, map.point.y, map.point.z
-        #     self.get_logger().info(f"[TF] {class_name} → map: (x={x:.2f}, y={y:.2f}, z={z:.2f})")
-        #     return x, y, z
-        # except Exception as e:
-        #     self.get_logger().warn(f"[TF] class={class_name} 변환 실패: {e}")
-        #     return float('nan'), float('nan'), float('nan')
+        # else:
+        #     return 0.0, 0.0, 0.0
+
+        try:
+            map = self.tf_buffer.transform(point, 'map', timeout=rclpy.duration.Duration(seconds=1.0))
+            x, y, z = map.point.x, map.point.y, map.point.z
+            self.get_logger().info(f"[TF] {class_name} → map: (x={x:.2f}, y={y:.2f}, z={z:.2f})")
+            return x, y, z
+        except Exception as e:
+            self.get_logger().warn(f"[TF] class={class_name} 변환 실패: {e}")
+            return float('nan'), float('nan'), float('nan')
 
     def publish_marker(self, x, y, z, label):
         marker = Marker()
@@ -259,7 +266,7 @@ def main():
 
             if frame is not None:
                 for obj in overlay_info:
-                    if obj["conf"] < 7.5:
+                    if obj["conf"] < 0.75:
                         continue
                     u, v = obj["center"]
                     x1, y1, x2, y2 = obj["bbox"]
