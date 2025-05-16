@@ -22,8 +22,9 @@ import torch
 
 # === 상수 정의 ===
 MODEL_PATH = '/home/rokey/rokey_ws/model/best.pt'
-TARGET_CLASS_ID = 0
+# TARGET_CLASS_ID = 0
 INFERENCE_PERIOD_SEC = 1.0 / 20  # 20Hz 추론 주기
+INIT_LOADING_TIME = 2.0
 
 BASE_LINK = 'base_link'
 XYZ = ['x', 'y', 'z']
@@ -63,6 +64,7 @@ class YoloDepthToMap(Node):
 
         self.tf_buffer = tf2_ros.Buffer()
         self.tf_listener = tf2_ros.TransformListener(self.tf_buffer, self)
+        time.sleep(INIT_LOADING_TIME)
         self.get_logger().info("[3/6] TF2 Transform Listener 초기화 완료")
 
         self.create_subscription(Image, RGB_TOPIC, self.rgb_callback, 1)
@@ -73,7 +75,7 @@ class YoloDepthToMap(Node):
         self.marker_pub = self.create_publisher(Marker, MARKER_TOPIC, 10)
         self.marker_id = 0
         self.error_pub = self.create_publisher(AnomalyReport, ERROR_TOPIC, 10)
-        self.get_logger().info(f"[5/6] 퍼블리셔 설정 완료\n:  MAKER: {MARKER_TOPIC}\n  ERROR: {ERROR_TOPIC}")
+        self.get_logger().info(f"[5/6] 퍼블리셔 설정 완료\n  MAKER: {MARKER_TOPIC}\n  ERROR: {ERROR_TOPIC}")
 
         self.tf_service = self.create_client(TransformPoint, TF_SERVICE)
         self.get_logger().info(f"[6/6] 서비스 설정 완료: {TF_SERVICE}")
@@ -201,17 +203,18 @@ class YoloDepthToMap(Node):
 
                 # object 기준 포인트 생성
                 obj = self.set_point(rgb_msg.header.frame_id, x, y, z)
-                obj_x, pbj_y, obj_z = self.transform_to_map(obj, label)
+                obj_x, obj_y, obj_z = self.transform_to_map(obj, label)
                 if not np.isnan(obj_x):
-                    self.publish_marker(obj_x, pbj_y, obj_z, label)
+                    self.publish_marker(obj_x, obj_y, obj_z, label)
 
                 if 'err' in label:
                     # base_link 기준 포인트 생성
                     base = self.set_point(BASE_LINK, 0.0, 0.0, 0.0)
                     base_x, base_y, base_z = self.transform_to_map(base, BASE_LINK)
                     
-                    obj = make_xyz_dict([obj_x, pbj_y, obj_z])
+                    obj = make_xyz_dict([obj_x, obj_y, obj_z])
                     base = make_xyz_dict([base_x, base_y, base_z])
+                    self.get_logger().info(base)
                     img = self.display_rgb
                     self.publish_error(base, obj, label, img)
 

@@ -8,16 +8,22 @@ from turtlebot4_navigation.turtlebot4_navigator import TurtleBot4Navigator
 from tf_transformations import quaternion_from_euler
 import time
 
+INIT_POSE = [0.2509, 0.7195, 270.0]
+
 GOAL_POSES_BOT = [
-    [0.0350, 0.6523, 180.0],  # map_bot1
+    # start to patrol
+    [0.0350, 0.6523, 180.0],    # map_bot1
     [-0.0619, -1.6371, 180.0],  # map_bot2
-    [0.4564, -0.8648, 270.0],  # map_bot3
-    [0.8353, -1.6557, 0.0],  # map_bot4
-    [1.0313, 0.6398, 0.0],   # map_bot5
+    [0.4564, -0.8648, 270.0],   # map_bot3
+    [0.8353, -1.6557, 0.0],     # map_bot4
+    [1.0313, 0.6398, 0.0],      # map_bot5
+
     # return to docking station
-    [0.4564, -0.8648, 180.0],  # map_bot3
-    [0.0350, 0.6523, 0.0],  # map_bot1 
+    [0.4564, -0.8648, 180.0],   # map_bot3
+    [0.0350, 0.6523, 0.0],      # map_bot1 
 ]
+
+INIT_LOADING_TIME = 5.0
 
 def create_pose(pose:list, navigator):
     x, y, yaw_deg = pose
@@ -45,10 +51,10 @@ def main():
     nav_navigator = BasicNavigator()
 
     # 1. 초기 위치 설정
-    initial_pose = create_pose([0.2509, 0.7195, 270.0], nav_navigator)
+    initial_pose = create_pose(INIT_POSE, nav_navigator)
     nav_navigator.setInitialPose(initial_pose)
-    nav_navigator.get_logger().info(f'초기 위치 설정 중...')
-    time.sleep(1.0) #AMCL이 초기 pose 처리 시 필요한 시간과 TF를 얻을 수 있게 됨
+    nav_navigator.get_logger().info(f'초기 위치 설정 중... {int(INIT_LOADING_TIME)}s')
+    time.sleep(INIT_LOADING_TIME) #AMCL이 초기 pose 처리 시 필요한 시간과 TF를 얻을 수 있게 됨
     
     nav_navigator.waitUntilNav2Active()
 
@@ -58,11 +64,6 @@ def main():
         dock_navigator.undock()
 
     # 3. 개별 Pose 생성 (경유지 명시)
-    # waypoints = [
-    #     create_pose(-0.02, -1.39, 0.0, nav_navigator),
-    #     create_pose(-2.77, -1.29, 180.0, nav_navigator),
-    #     create_pose(-0.30, -0.04, -90.0, nav_navigator)
-    # ]
     waypoints = [create_pose(GOAL_POSES_BOT[i], nav_navigator) for i in range(len(GOAL_POSES_BOT))]
 
     # 4. Waypoint 경로 이동 시작
