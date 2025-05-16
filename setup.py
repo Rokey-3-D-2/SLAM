@@ -31,6 +31,9 @@ setup(
             'nav_to_pose = rokey_pjt.5_1_tb4_nav_to_pose:main',
             'nav_through_poses = rokey_pjt.5_2_tb4_nav_through_poses:main',
             'follow_waypoints = rokey_pjt.5_3_tb4_follow_waypoints:main',
+            'sc_nav_to_pose = rokey_pjt.5_1_sc_nav_to_pose:main',
+            'sc_nav_through_poses = rokey_pjt.5_2_sc_nav_through_poses:main',
+            'sc_follow_waypoints = rokey_pjt.5_3_sc_follow_waypoints:main',
         ],
     },
 )
