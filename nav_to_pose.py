@@ -5,20 +5,12 @@ from turtlebot4_navigation.turtlebot4_navigator import TurtleBot4Directions, Tur
 
 # ======================
 # 초기 설정 (파일 안에서 직접 정의)
-YOLO_MODEL_PATH = '/home/choin/rokey_ws/model/best.pt'
-ROBOT_NAMESPACE = 'robot1'
-RGB_TOPIC = f'/{ROBOT_NAMESPACE}/oakd/rgb/preview/image_raw'
-DEPTH_TOPIC = f'/{ROBOT_NAMESPACE}/oakd/stereo/image_raw'
-CAMERA_INFO_TOPIC = f'/{ROBOT_NAMESPACE}/oakd/stereo/camera_info'
-TARGET_CLASS_ID = 0  # 예: car
 # ======================
 INITIAL_POSE_POSITION = [0.00, 0.00]
 INITIAL_POSE_DIRECTION = TurtleBot4Directions.NORTH
 
 GOAL_POSES = [
-    ([-0.02, -1.39], TurtleBot4Directions.NORTH),
-    ([-2.77, -1.29], TurtleBot4Directions.SOUTH),
-    ([-0.29, -0.22], TurtleBot4Directions.EAST),
+    ([-0.87, -1.21], TurtleBot4Directions.NORTH),
 ]
 # ======================
 
@@ -37,8 +29,9 @@ def main():
 
     navigator.undock()
 
-    goal_pose_msgs = [navigator.getPoseStamped(position, direction) for position, direction in GOAL_POSES]
-    navigator.startFollowWaypoints(goal_pose_msgs)
+    goal_pose = navigator.getPoseStamped(*GOAL_POSES[0])
+    navigator.startToPose(goal_pose)
+    navigator.goToPose
 
     navigator.dock()
 
