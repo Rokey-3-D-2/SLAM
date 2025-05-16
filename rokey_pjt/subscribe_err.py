@@ -10,6 +10,7 @@ from builtin_interfaces.msg import Time
 class AnomalyReportSubscriber(Node):
     def __init__(self):
         super().__init__("anomaly_report_subscriber")
+        self.get_logger().info("📡 이상 감지 메시지 수신 시작")
         self.subscription = self.create_subscription(
             AnomalyReport, "/robot1/error_detected", self.listener_callback, 10
         )

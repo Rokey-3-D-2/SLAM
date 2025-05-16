@@ -29,6 +29,7 @@ setup(
             "yolo_depth_checker = rokey_pjt.3_tb4_yolo_bbox_depth_checker:main",
             "tf_trans = rokey_pjt.tf_point_transform:main",
             "object_xyz_marker = rokey_pjt.yolo_depth_tf_rviz:main",
+            "object_xyz_marker_remake = rokey_pjt.yolo_depth_tf_rviz_remake:main",
             "image_viewer = rokey_pjt.image_viewer:main",
             "subscribe_err = rokey_pjt.subscribe_err:main",
             "publish_err = rokey_pjt.publish_err:main",
