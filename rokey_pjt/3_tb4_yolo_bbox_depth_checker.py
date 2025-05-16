@@ -13,21 +13,22 @@ import sys
 # 상수 정의
 # ========================
 # YOLO_MODEL_PATH = '/home/mi/rokey_ws/model/yolov8n.pt'
-YOLO_MODEL_PATH = '/home/lhj/rokey_ws/model/best.pt'  # YOLO 모델 경로
+YOLO_MODEL_PATH = "/home/we/rokey_ws/model/best.pt"  # YOLO 모델 경로
 # RGB_TOPIC = 'cropped/rgb/image_raw'
 # DEPTH_TOPIC = 'cropped/depth/image_raw'
 # CAMERA_INFO_TOPIC = 'cropped/camera_info'
 
-ROBOT_NAMESPACE = 'robot1'
-RGB_TOPIC = f'/{ROBOT_NAMESPACE}/oakd/rgb/preview/image_raw'
-DEPTH_TOPIC = f'/{ROBOT_NAMESPACE}/oakd/stereo/image_raw'
-CAMERA_INFO_TOPIC = f'/{ROBOT_NAMESPACE}/oakd/stereo/camera_info'
+ROBOT_NAMESPACE = "robot1"
+RGB_TOPIC = f"/{ROBOT_NAMESPACE}/oakd/rgb/preview/image_raw"
+DEPTH_TOPIC = f"/{ROBOT_NAMESPACE}/oakd/stereo/image_raw"
+CAMERA_INFO_TOPIC = f"/{ROBOT_NAMESPACE}/oakd/stereo/camera_info"
 TARGET_CLASS_ID = 0  # 예: car
 # ========================
 
+
 class YoloDepthDistance(Node):
     def __init__(self):
-        super().__init__('yolo_depth_distance')
+        super().__init__("yolo_depth_distance")
         self.get_logger().info("YOLO + Depth 거리 출력 노드 시작")
 
         # YOLO 모델 로드
@@ -35,7 +36,7 @@ class YoloDepthDistance(Node):
             self.get_logger().error(f"YOLO 모델이 존재하지 않습니다: {YOLO_MODEL_PATH}")
             sys.exit(1)
         self.model = YOLO(YOLO_MODEL_PATH)
-        self.class_names = getattr(self.model, 'names', [])
+        self.class_names = getattr(self.model, "names", [])
 
         self.bridge = CvBridge()
         self.K = None
@@ -44,7 +45,9 @@ class YoloDepthDistance(Node):
         self.lock = threading.Lock()
 
         # ROS 구독자 설정
-        self.create_subscription(CameraInfo, CAMERA_INFO_TOPIC, self.camera_info_callback, 1)
+        self.create_subscription(
+            CameraInfo, CAMERA_INFO_TOPIC, self.camera_info_callback, 1
+        )
         self.create_subscription(Image, RGB_TOPIC, self.rgb_callback, 1)
         self.create_subscription(Image, DEPTH_TOPIC, self.depth_callback, 1)
 
@@ -58,11 +61,11 @@ class YoloDepthDistance(Node):
 
     def rgb_callback(self, msg):
         with self.lock:
-            self.rgb_image = self.bridge.imgmsg_to_cv2(msg, 'bgr8')
+            self.rgb_image = self.bridge.imgmsg_to_cv2(msg, "bgr8")
 
     def depth_callback(self, msg):
         with self.lock:
-            self.depth_image = self.bridge.imgmsg_to_cv2(msg, 'passthrough')
+            self.depth_image = self.bridge.imgmsg_to_cv2(msg, "passthrough")
 
     def processing_loop(self):
         cv2.namedWindow("YOLO Distance View", cv2.WINDOW_NORMAL)
@@ -95,18 +98,30 @@ class YoloDepthDistance(Node):
                     else:
                         distance_m = float(val)
 
-                    label = self.class_names[cls] if cls < len(self.class_names) else f'class_{cls}'
+                    label = (
+                        self.class_names[cls]
+                        if cls < len(self.class_names)
+                        else f"class_{cls}"
+                    )
                     self.get_logger().info(f"{label} at ({u},{v}) → {distance_m:.2f}m")
 
                     # RGB 이미지 위 시각화
                     cv2.rectangle(rgb, (x1, y1), (x2, y2), (0, 255, 0), 2)
                     cv2.circle(rgb, (u, v), 4, (0, 0, 255), -1)
-                    cv2.putText(rgb, f"{distance_m:.2f}m", (x1, y1 - 10),
-                                cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 0, 0), 2)
+                    cv2.putText(
+                        rgb,
+                        f"{distance_m:.2f}m",
+                        (x1, y1 - 10),
+                        cv2.FONT_HERSHEY_SIMPLEX,
+                        0.6,
+                        (255, 0, 0),
+                        2,
+                    )
 
             cv2.imshow("YOLO Distance View", rgb)
-            if cv2.waitKey(1) & 0xFF == ord('q'):
+            if cv2.waitKey(1) & 0xFF == ord("q"):
                 break
+
 
 # ========================
 # 메인 함수
@@ -123,5 +138,6 @@ def main():
         rclpy.shutdown()
         cv2.destroyAllWindows()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()

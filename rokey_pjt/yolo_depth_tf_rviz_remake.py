@@ -21,7 +21,7 @@ import torch
 # === 상수 정의 ===
 MODEL_PATH = "/home/we/rokey_ws/model/best.pt"
 TARGET_CLASS_ID = 0
-INFERENCE_PERIOD_SEC = 1.0 / 20  # 20Hz 추론 주기
+INFERENCE_PERIOD_SEC = 1.0 / 10  # 20Hz 추론 주기
 RGB_TOPIC = "/robot1/oakd/rgb/preview/image_raw"
 DEPTH_TOPIC = "/robot1/oakd/stereo/image_raw"
 CAMERA_INFO_TOPIC = "/robot1/oakd/stereo/camera_info"
@@ -271,13 +271,16 @@ def main():
 
     try:
         while rclpy.ok():
+            node.get_logger().info("state111111111111111111111111")
             with node.lock:
+                node.get_logger().info("state222222222222222222222222")
                 frame = (
                     node.display_rgb.copy() if node.display_rgb is not None else None
                 )
                 overlay_info = node.overlay_info.copy()
 
             if frame is not None:
+                node.get_logger().info("state333333333333333333333333")
                 for obj in overlay_info:
                     u, v = obj["center"]
                     x1, y1, x2, y2 = obj["bbox"]
@@ -300,6 +303,7 @@ def main():
                     frame, (frame.shape[1] * 3, frame.shape[0] * 3)
                 )
                 cv2.imshow("YOLO + Depth + Map", display_img)
+                node.get_logger().info("state444444444444444444444444")
 
             if cv2.waitKey(1) & 0xFF == ord("q"):
                 node.get_logger().info("Shutdown requested by user.")
@@ -308,6 +312,7 @@ def main():
     except KeyboardInterrupt:
         pass
     finally:
+        node.get_logger().info("state444444444444444444444444")
         node.destroy_node()
         rclpy.shutdown()
         cv2.destroyAllWindows()
