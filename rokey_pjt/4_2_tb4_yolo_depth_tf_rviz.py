@@ -111,27 +111,6 @@ class YoloDepthToMap(Node):
         return point
     
     def transform_to_map(self, point: PointStamped, class_name: str):
-        # req = TransformPoint.Request()
-        # req.input = point
-        # req.label = class_name
-
-        # # future = self.tf_service.call(req)
-        # future = self.tf_service.call_async(req)
-        # # res = future.result()
-        # # rclpy.spin_until_future_complete(self, future)
-        # if future.result():
-        #     res = future.result()
-
-        #     if res.success:
-        #         self.get_logger().info(res.error_msg)
-        #     else:
-        #         self.get_logger().warn(res.error_msg)
-
-        #     return res.x, res.y, res.z
-
-        # else:
-        #     return 0.0, 0.0, 0.0
-
         try:
             map = self.tf_buffer.transform(point, 'map', timeout=rclpy.duration.Duration(seconds=1.0))
             x, y, z = map.point.x, map.point.y, map.point.z
