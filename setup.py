@@ -29,6 +29,8 @@ setup(
             'yolo_depth_checker = rokey_pjt.3_tb4_yolo_bbox_depth_checker:main',
             'tf_trans = rokey_pjt.tf_point_transform:main',
             'object_xyz_marker = rokey_pjt.yolo_depth_tf_rviz:main',
+            'nav_through_poses = rokey_pjt.nav_through_poses:main'
+            'follow_waypoints.py = rokey_pjt.follow_waypoints:main'
         ],
     },
 )
