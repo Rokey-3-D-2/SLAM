@@ -25,6 +25,9 @@ class TFTransformService(Node):
             response.error_message = ""
 
             # self.get_logger().info(f"[TF] 변환 성공: {request.label}")
+            msg = f"[TF] {request.label} → map: (x={request.x:.2f}, y={request.y:.2f}, z={request.z:.2f})"
+            response.error_msg = msg
+
             self.get_logger().info(
                 f"[TF] {request.label} → map: (x={request.x:.2f}, y={request.y:.2f}, z={request.z:.2f})"
             )
