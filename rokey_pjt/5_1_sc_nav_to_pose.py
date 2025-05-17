@@ -25,7 +25,8 @@ GOAL_POSES_BOT = [
 INIT_LOADING_TIME = 2.0
 WAITING_FOR_DETECTION = 2.0
 
-def create_pose(x, y, yaw_deg, navigator: BasicNavigator) -> PoseStamped:
+def create_pose(pose, navigator: BasicNavigator) -> PoseStamped:
+    x, y, yaw_deg = pose
     """x, y, yaw(도 단위) → PoseStamped 생성"""
     pose = PoseStamped()
     pose.header.frame_id = 'map'
