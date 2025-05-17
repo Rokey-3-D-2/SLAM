@@ -13,7 +13,8 @@ import sys
 # 상수 정의
 # ========================
 # YOLO_MODEL_PATH = '/home/mi/rokey_ws/model/yolov8n.pt'
-YOLO_MODEL_PATH = '/home/lhj/rokey_ws/model/best.pt'  # YOLO 모델 경로
+HOME_PATH = os.path.expanduser("~")  # 현재 사용자의 홈 디렉토리 경로
+YOLO_MODEL_PATH = os.path.join(HOME_PATH, 'rokey_ws', 'model', 'best.pt')  # 모델 경로
 # RGB_TOPIC = 'cropped/rgb/image_raw'
 # DEPTH_TOPIC = 'cropped/depth/image_raw'
 # CAMERA_INFO_TOPIC = 'cropped/camera_info'

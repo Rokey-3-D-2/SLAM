@@ -4,9 +4,9 @@ import os
 
 # 현재 스크립트 실행 위치
 BASE_DIR = os.getcwd()
-
+HOME_PATH = os.path.expanduser("~")  # 현재 사용자의 홈 디렉토리 경로
 # 원본 데이터 폴더
-IMAGE_DIR = "/home/lhj/rokey_ws/images"
+IMAGE_DIR = os.path.join(HOME_PATH, 'rokey_ws', 'images') #"/home/lhj/rokey_ws/images"
 
 # 1. YoloSplitter 설정
 ys = YoloSplitter(imgFormat=['.jpg', '.jpeg', '.png'], labelFormat=['.txt'])

@@ -7,11 +7,13 @@ import math
 import os
 import sys
 from ultralytics import YOLO
+import os
 
 # ========================
 # 상수 정의
 # ========================
-MODEL_PATH = '/home/lhj/rokey_ws/model/best.pt'  # YOLO 모델 경로 경로
+HOME_PATH = os.path.expanduser("~")  # 현재 사용자의 홈 디렉토리 경로
+MODEL_PATH = os.path.join(HOME_PATH, 'rokey_ws', 'model', 'best.pt')  # 모델 경로
 # MODEL_PATH = '/home/mi/rokey_ws/model/yolov8n.pt'  # YOLO 모델 경로
 IMAGE_TOPIC = '/robot1/oakd/rgb/preview/image_raw'  # 구독할 이미지 토픽 이름
 TARGET_CLASS_ID = 0  # 탐지할 클래스 ID (예: car = 0)

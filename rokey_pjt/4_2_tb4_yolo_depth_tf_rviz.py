@@ -20,9 +20,11 @@ import os
 import sys
 from ultralytics import YOLO
 import torch
+import os
 
 # === 상수 정의 ===
-MODEL_PATH = "/home/we/rokey_ws/model/best.pt"
+HOME_PATH = os.path.expanduser("~")  # 현재 사용자의 홈 디렉토리 경로
+MODEL_PATH = os.path.join(HOME_PATH, 'rokey_ws', 'model', 'best.pt')  # 모델 경로
 # TARGET_CLASS_ID = 0
 INFERENCE_PERIOD_SEC = 1.0 / 30  # 30Hz 추론 주기
 INIT_LOADING_TIME = 2.0
