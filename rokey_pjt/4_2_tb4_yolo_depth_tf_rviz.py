@@ -23,7 +23,7 @@ import torch
 # === 상수 정의 ===
 MODEL_PATH = '/home/rokey/rokey_ws/model/best.pt'
 # TARGET_CLASS_ID = 0
-INFERENCE_PERIOD_SEC = 1.0 / 20  # 20Hz 추론 주기
+INFERENCE_PERIOD_SEC = 1.0 / 30  # 30Hz 추론 주기
 INIT_LOADING_TIME = 2.0
 
 BASE_LINK = 'base_link'
@@ -214,7 +214,6 @@ class YoloDepthToMap(Node):
                     
                     obj = make_xyz_dict([obj_x, obj_y, obj_z])
                     base = make_xyz_dict([base_x, base_y, base_z])
-                    self.get_logger().info(base)
                     img = self.display_rgb
                     self.publish_error(base, obj, label, img)
 
@@ -225,6 +224,7 @@ class YoloDepthToMap(Node):
                     "bbox": (x1, y1, x2, y2),
                     "depth": z
                 })
+                self.get_logger().info(f'overlay_info: {overlay_info}')
 
         with self.lock:
             self.overlay_info = overlay_info
@@ -248,7 +248,7 @@ def main():
 
             if frame is not None:
                 for obj in overlay_info:
-                    if obj["conf"] < 0.75:
+                    if obj["conf"] < 0.65:
                         continue
                     u, v = obj["center"]
                     x1, y1, x2, y2 = obj["bbox"]

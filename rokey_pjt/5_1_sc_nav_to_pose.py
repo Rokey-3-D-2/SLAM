@@ -22,7 +22,7 @@ GOAL_POSES_BOT = [
 ]
 
 # constant
-INIT_LOADING_TIME = 2.0
+INIT_LOADING_TIME = 5.0
 WAITING_FOR_DETECTION = 2.0
 
 def create_pose(pose, navigator: BasicNavigator) -> PoseStamped:
